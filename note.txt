@@ -1,0 +1,41 @@
+1. use of authentication:
+(1) Create an Account:
+(2) login identify user to edit
+(3) Restrict Access: subscription for certain parts of website(pay vs unpay)
+
+2. Level 1 security:
+Email & Password stored in database
+Database of users: foundUser.password === Password
+
+3. Level 2: Encryption:
+(1) Ceasar Cipher: shit 3 e.g. DE => BC need a key to read message
+(2) mongoose-encryption: AES-256-CBC
+(3) npm i mongoose-encryption
+(4) const encrypt = require("mongoose-encryption");
+(5) change simple schema to full schema:
+const userSchema = {
+  email: String,
+  password: String
+}
+       ||
+       \/
+
+const userSchema = new mongoose.Schema({
+   email: String,
+   password: String
+});
+
+const secret = "Thisisourlittlesecret";
+userSchema.plugin(encrypt, {secret: secret, encryptedFields: ['password']});
+
+4. Environment variables: .ENV
+(1) npm i dotenv
+(2) require('dotenv').config(); => at the top
+(3) Create env file: touch .env
+(4) Form: NAME=VALUE
+e.g. SECRET=Thisisourlittlesecret.
+userSchema.plugin(encrypt, {secret: process.env.SECRET, encryptedFields: ['password']});
+=> Error: Authentication code missing => empty DB
+show dbs, use userDB, show collections, db.users.drop()
+(5) gitignore => git => node.gitignore => paste ignore content
+(6) git add. => git commit -m "Add Environment Vars" => git push -u origin master
